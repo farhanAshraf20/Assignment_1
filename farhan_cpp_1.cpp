@@ -15,13 +15,10 @@ class Employee
 	double salary;
 	int no_of_hours;
 public:
-	Employee() {}
-	void getinfo()
+	void getinfo(float s, float t)
 	{
-		cout << "Enter the salary of employee: ";
-		cin >> salary;
-		cout << "Enter the number of hours: ";
-		cin >> no_of_hours;
+	    salary=s;
+	    no_of_hours=t;
 	}
 	void AddSal()
 	{
@@ -43,11 +40,18 @@ public:
 
 int main()
 {
+    float s,t;
+    	cout << "Enter the salary of employee: ";
+		cin >> s;
+		cout << "Enter the number of hours: ";
+		cin >> t;
+    
 	Employee emp;
-		emp.getinfo();
+		emp.getinfo(s,t);
 		emp.AddSal();
 		emp.AddWork();
 
 		cout << "\nThe final salary of employee is:";
 		emp.DisplaySalary();
 }
+
