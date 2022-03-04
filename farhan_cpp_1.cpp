@@ -12,7 +12,7 @@ using namespace std;
 
 class Employee
 {
-	double salary;
+	float salary;
 	int no_of_hours;
 public:
 	void getinfo(float s, float t)
@@ -41,7 +41,7 @@ public:
 int main()
 {
     float s,t;
-    	cout << "Enter the salary of employee: ";
+    		cout << "Enter the salary of employee: ";
 		cin >> s;
 		cout << "Enter the number of hours: ";
 		cin >> t;
