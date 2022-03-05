@@ -248,3 +248,13 @@ void bottom_up(struct node *h)
 		printf("%d %d ",h->lptr->data,h->rptr->data);
 
 	printf("%d ",h->data);
+	
+/*
+	if(h->lptr->lptr == NULL)
+		return;
+	if(h->lptr->lptr->lptr == NULL)
+		return;
+	if(h->lptr->lptr->lptr->lptr == NULL)
+		return;
+*/
+}
