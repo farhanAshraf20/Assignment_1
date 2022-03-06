@@ -15,195 +15,232 @@ Farhan Ashraf
 ************************************************************************************************/
 #include<stdio.h>
 #include<string.h>
-#define MAX_LIMIT	10
+int count = 0;				//global variable to count no. of books in the library
 
-int ind;
+//structure defination
+struct library{
 
-struct library {
-	int accession_number;
-	char title[MAX_LIMIT];
-	char author[MAX_LIMIT];
-	int price;
-	int flag;
-}l[5];
+	//struct variable declaration
 
-void add_book_info();
-void display_book_info();
-void list_author_books();
-void list_title();
-void list_count_books();
+	int acc_no;
+	char title[40];
+	char author_name[30];
+	int price;              
+	int issued;                 //flag for issueing book
+
+} book[100];	//declaration of struct variable;
+
+//function declaration
+
+int add_book();
+int display_book_info(int);
+int list_book_by_author(char []);
+int list_title();
 void list_books_order();
+void count_books();
 
+//main function
 int main()
 {
-	int choice, status=0;
+	//variable declaration	
+	int opt, ac_no;
+	int flag = 1;
+	char author[30];
+	
+	printf("Welcome to Library Management System..!!!\n");
 
-	while(status != 1)
+	//menu display and library operations
+	
+	while(flag != 0)
 	{
-		printf("\nEnter your choice\n");
-		printf("1. Add book information\n2. Display book information\n3. List all books of given author\n4. List the title of specified book\n");
-		printf("5. List the count of books in the library\n6. List the books in the order of accession number\n7. Exit\n");
-		printf("\nyour choice is : ");
-		scanf("%d",&choice);
-		
-		switch(choice)
+		printf("\nSelect the operation you want to perform\n");
+
+		//printing menu of operations on library
+		printf("1. Add book info.\n2. Display book info.\n3. List all books of given author\n4. List the title of specified book\n5. List the count of books in the library\n6. List the book in order of accession number\n7. Exit\n");
+
+		scanf("%d", &opt);          //taking input option 
+
+		switch(opt)
 		{
-			case 1:
-				printf("Add Book information\n");
-				add_book_info();
-				break;
-			case 2:
-				printf("Book information is as follows:\n\n");
-				display_book_info();
-				break;
-			case 3:
-				list_author_books();
-				break;
-			case 4:
-				list_title();
-				break;
-			case 5:
-				list_count_books();
-				break;
-			case 6:
-				list_books_order();
-				break;
-			case 7:
-				status=1;
-				printf("Exit !\n");
-				break;
-			default:
-				printf("Input in not valid!\n");
+			case 1:             //add book info
+			printf("Enter the following info:\n");
+			add_book();
+			break;
+
+			case 2:            //display book info
+			printf("Enter the accession number of book\n");
+			scanf("%d", &ac_no);
+			display_book_info(ac_no);
+			break;
+
+			case 3:             //list all book of given author
+			printf("Enter name of author \n");
+			scanf("%s", author);
+			list_book_by_author(author);
+			break;
+
+			case 4:             //list title of specified book
+			list_title();
+			break;
+
+			case 5:             //count the books in library
+			count_books();
+			break;
+
+			case 6:             //list books in order of acc_no
+			list_books_order();
+			break;
+
+			case 7:         //exit
+			flag = 0;
+			break;
+			
 		}
 	}
-
 	return 0;
 }
 
-void add_book_info()
+//function definations
+
+int add_book()        		//function for adding book info
 {
-
-	printf("Enter Accession Number: ");
-	scanf("%d",&l[ind].accession_number);
-
-	char temp=getchar();
-	printf("Enter book title: ");
-	fgets(l[ind].title, MAX_LIMIT, stdin);
-
-	printf("Enter the author: ");
-	fgets(l[ind].author, MAX_LIMIT, stdin);
-
-	printf("Enter the price of the book: ");
-	scanf("%d",&l[ind].price);
-
-	printf("Enter 1 for book issued, 0 for book not issued: ");
-	scanf("%d",&l[ind].flag);
-
-	ind=ind+1;
+	//adding book info
+	
+	printf("Accession number : ");
+	scanf("%d", &book[count].acc_no);
+	
+	printf("Book Title (use '_' instead of <space>): ");
+	scanf("%s", book[count].title);
+	
+	printf("Author Name (use '_' instead of <space>): ");
+	scanf("%s", book[count].author_name);
+	
+	printf("Price : ");
+	scanf("%d", &book[count].price);
+	
+	printf("If Book is issued enter '1', else enter '0' : ");
+	scanf("%d", &book[count].issued);
+	
+	count++;		//increase count by 1
+	
+	return 0;
 }
 
-void display_book_info()
+
+int display_book_info(int acNo)			//function to find book and display its info 
 {
-	int i;
-	for(i=0; i<ind; i++)
+	int f=0;
+	
+	for(int i = 0; i <= count; i++)			//searching for book using accession no.
 	{
-		printf("Book %d\n",i+1);
-		printf("Accession Number: %d\n",l[i].accession_number);
-		printf("Title of book: %s",l[i].title);
-		printf("Author of the book: %s",l[i].author);
-		printf("Price of book is: %d\n",l[i].price);
-		printf("Status of book issued(1)/not issued(0): %d\n",l[i].flag);
-		printf("\n");
-	}
-}
-
-void list_author_books()
-{
-	char user_in[MAX_LIMIT];
-	int i;
-
-	char temp=getchar();
-	printf("Enter the author name to list: ");
-	fgets(user_in, MAX_LIMIT, stdin);
-
-	for(i=0; i<ind; i++)
-	{
-		if(strstr(user_in, l[i].author))
+		if(book[i].acc_no == acNo)	//if found, display book info
 		{
-			printf("%s",l[i].title);
+			printf("Book Found\n");
+			printf("Accession No. : %d\nTitle : %s\nAuthor : %s\nPrice (Rs.) : %d\nIssue status : %d\n", book[i].acc_no, book[i].title, book[i].author_name, book[i].price, book[i].issued);
+			
+			f=1;		//set flag
+			break;
 		}
 	}
+	
+	if(f == 0)
+		printf("Book Not Found\n");
+	
+	
+	return 0;
 }
 
-void list_title()
+
+int list_book_by_author(char author[])		//find and display books by specified author
 {
-	int num, i;
-
-	printf("Enter the accession number to get book title: \n");
-	scanf("%d",&num);
-
-	for(i=0; i<ind; i++)
+	int f=0;
+	
+	for(int i = 0; i <= count; i++)			//searching for book of specified author
 	{
-		if(num == l[i].accession_number)
+		if(strcmp(book[i].author_name ,author) == 0)	//if found, display book info
 		{
-			printf("%s",l[i].title);
+			
+			printf("%s\n", book[i].title);
+			f=1;		//set flag
 		}
 	}
+	
+	if(f == 0)
+		printf("Book by %s Not Found\n", author);
+			
+	return 0;
+
 }
 
-void list_count_books()
+int list_title()		//list the title of specified book
 {
-	printf("Total number of books in library are: %d\n",ind);
+	int acNo, i;
+
+	printf("Enter the accession number : \n");
+	scanf("%d",&acNo);
+
+	for(i=0; i<count; i++)			//search for acNo in library
+	{
+		if(acNo == book[i].acc_no)
+		{
+			printf("Book Found\n");
+			printf("Title : %s\n", book[i].title);		//printf title of book
+						
+			break;
+		}
+	}
+	
+	return 0;
 }
 
-void list_books_order()
+void count_books()			//count total books
+{
+	printf("Total number of books in library are: %d\n", count);
+}
+
+void list_books_order()			//list book in order of accession number
 {
 	int i,j, acc,temp=0;
-	char str[MAX_LIMIT];
+	char str[20];
 
-	for(j=0;j<ind;j++)
+	for(j=0;j<count;j++)
 	{
-		for(i=j; i<ind; i++)
+		for(i=j; i<count; i++)
 		{
-			if(l[j].accession_number > l[i].accession_number)
-				{
-				temp = l[j].accession_number;
-				l[j].accession_number = l[i].accession_number;
-				l[i].accession_number = temp;
+			if(book[j].acc_no > book[i].acc_no)
+			{
+				temp = book[j].acc_no;
+				book[j].acc_no = book[i].acc_no;
+				book[i].acc_no = temp;
 
-				strcpy(str, l[j].title);
-				strcpy(l[j].title, l[i].title);
-				strcpy(l[i].title, str);
 
-				memset(str , 0, MAX_LIMIT);
+				strcpy(str, book[j].title);
+				strcpy(book[j].title, book[i].title);
+				strcpy(book[i].title, str);
 
-				strcpy(str, l[j].author);
-				strcpy(l[j].author, l[i].author);
-				strcpy(l[i].author, str);
+				memset(str , 0, 20);
 
-				temp=0;
-				temp = l[j].price;
-				l[j].price = l[i].price;
-				l[i].price = temp;
+				strcpy(str, book[j].author_name);
+				strcpy(book[j].author_name, book[i].author_name);
+				strcpy(book[i].author_name, str);
 
 				temp=0;
-				temp = l[j].flag;
-				l[j].flag = l[i].flag;
-				l[i].flag = temp;
+				temp = book[j].price;
+				book[j].price = book[i].price;
+				book[i].price = temp;
+
+				temp=0;
+				temp = book[j].issued;
+				book[j].issued = book[i].issued;
+				book[i].issued = temp;
 			}
 		}
 	}
 
-	for(i=0; i<ind; i++)
+	for(i=0; i<count; i++)		//print book details
 	{
-		printf("Book %d\n",i+1);
-		printf("Accession Number: %d\n",l[i].accession_number);
-		printf("Title of book: %s",l[i].title);
-		printf("Author of the book: %s",l[i].author);
-		printf("Price of book is: %d\n",l[i].price);
-		printf("Status of book issued(1)/not issued(0): %d\n",l[i].flag);
-		printf("\n");
+		printf("Accession No. : %d\nTitle : %s\nAuthor : %s\nPrice (Rs.) : %d\nIssue status : %d\n",book[i].acc_no, book[i].title, book[i].author_name, book[i].price, book[i].issued);
+		
 	}
 
 }
- 
