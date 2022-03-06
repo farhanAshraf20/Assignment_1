@@ -218,8 +218,6 @@ void list_books_order()			//list book in order of accession number
 				strcpy(book[j].title, book[i].title);
 				strcpy(book[i].title, str);
 
-				memset(str , 0, 20);
-
 				strcpy(str, book[j].author_name);
 				strcpy(book[j].author_name, book[i].author_name);
 				strcpy(book[i].author_name, str);
